@@ -11,9 +11,9 @@ import UIKit
 extension UIView {
     var rectInWindow: CGRect {
         if let window = UIApplication.shared.windows.last {
-            return window.convert(self.frame, to: window)
+            return self.superview?.convert(self.frame, to: window) ?? .zero
         }
-        return CGRect.zero
+        return .zero
     }
 }
 
