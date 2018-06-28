@@ -20,9 +20,11 @@ extension UIView {
 class PhotoTransitionViewController: UIViewController, UIViewControllerTransitioningDelegate {
     var fromImage: UIImage?
     var fromFrames: [CGRect]? // 多张图片
-    private(set) var fromFrame: CGRect! {
+    private(set) var fromFrame: CGRect? {
         didSet {
-            fromFrames = [fromFrame]
+            if let frame = fromFrame {
+                fromFrames = [frame]
+            }
         }
     }
     var fromImageContentMode: UIViewContentMode = .scaleAspectFill
@@ -30,7 +32,7 @@ class PhotoTransitionViewController: UIViewController, UIViewControllerTransitio
     var index = 0
     private var child: PhotoPreviewController!
     
-    init(fromImage: UIImage?, fromFrame: CGRect, photos: [Any?], imageContentMode: UIViewContentMode = .scaleAspectFill) {
+    init(fromImage: UIImage?, fromFrame: CGRect?, photos: [Any?], imageContentMode: UIViewContentMode = .scaleAspectFill) {
         super.init(nibName: nil, bundle: nil)
         self.fromImage = fromImage
         self.fromFrame = fromFrame
@@ -58,6 +60,18 @@ class PhotoTransitionViewController: UIViewController, UIViewControllerTransitio
         }
     }
     
+    func frames(_ currenFrames: [CGRect], behind: UInt = 0, after: UInt = 0) -> [CGRect] {
+        var frames = [CGRect]()
+        for _ in 0 ..< behind {
+            frames.append(.zero)
+        }
+        frames += currenFrames
+        for _ in 0 ..< after {
+            frames.append(.zero)
+        }
+        return frames
+    }
+    
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         let presentation = AXPresentationController.init(presentedViewController: presented, presenting: presenting)
         return presentation
@@ -79,7 +93,7 @@ class PhotoTransitionViewController: UIViewController, UIViewControllerTransitio
         if (fromFrames?.count ?? 0) > index {
             animator.fromFrame = fromFrames![index]
         } else {
-            animator.fromFrame = fromFrame
+            animator.fromFrame = CGRect.zero
         }
         animator.fromImageContentMode = fromImageContentMode
         return animator
@@ -180,7 +194,9 @@ class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             if frame.origin.x > screenFrame.size.width ||
                 frame.origin.y > screenFrame.size.height ||
                 frame.origin.x + frame.size.width < 0 ||
-                frame.origin.y + frame.size.height < 0
+                frame.origin.y + frame.size.height < 0 ||
+                frame.size.width == 0 ||
+                frame.size.height == 0
                 {
                 result = false
             }

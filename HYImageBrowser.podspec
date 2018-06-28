@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "HYImageBrowser"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "Image Browser"
 
   # This description is used to generate tags and improve search results.
@@ -91,7 +91,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "HYImageBrowser", "HYImageBrowser/**/*.{swift}"
+  s.source_files  = "HYImageBrowser/Sources/**/*.{swift}"
   # s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
