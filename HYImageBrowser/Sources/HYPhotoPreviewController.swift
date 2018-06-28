@@ -9,18 +9,18 @@
 import UIKit
 import Kingfisher
 
-public class HYPhotoPreviewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-    public var collectionView: UICollectionView!
-    public var label: UILabel!
-    public var photos: [Any?] = [] {
+open class HYPhotoPreviewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    open var collectionView: UICollectionView!
+    open var label: UILabel!
+    open var photos: [Any?] = [] {
         didSet {
             if photos.count > index {
                 label?.text = "\(index + 1) / \(photos.count)"
             }
         }
     }
-    public var image: UIImage?
-    public var index = 0 {
+    open var image: UIImage?
+    open var index = 0 {
         didSet {
             if photos.count > index {
                 collectionView?.selectItem(at: IndexPath.init(row: index, section: 0), animated: false, scrollPosition: .centeredHorizontally)
@@ -29,13 +29,13 @@ public class HYPhotoPreviewController: UIViewController, UICollectionViewDelegat
         }
     }
     
-    public var indexChanged: ((_ index: Int) -> ())?
+    open var indexChanged: ((_ index: Int) -> ())?
     
-    override public var prefersStatusBarHidden: Bool {
+    override open var prefersStatusBarHidden: Bool {
         return true
     }
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
@@ -63,7 +63,7 @@ public class HYPhotoPreviewController: UIViewController, UICollectionViewDelegat
         }
     }
     
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo_preview_cell", for: indexPath) as! PhotoPreviewCell
         cell.photo = photos[indexPath.row]
         cell.dismiss = {
@@ -73,21 +73,21 @@ public class HYPhotoPreviewController: UIViewController, UICollectionViewDelegat
         return cell
     }
     
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.frame.size
     }
     
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return image == nil ? photos.count : 1
     }
     
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         index = Int(round(scrollView.contentOffset.x / (view.frame.size.width + 15)))
         image = (collectionView.cellForItem(at: IndexPath.init(row: index, section: 0)) as? PhotoPreviewCell)?.preview.image
         indexChanged?(index)
     }
 
-    override public func didReceiveMemoryWarning() {
+    override open func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
@@ -129,7 +129,7 @@ class PhotoPreviewCell: UICollectionViewCell {
     }
 }
 
-public class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate {
+open class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate {
     private var scrollView: UIScrollView!
     private var imageView: UIImageView!
     private var isZoomedIn = false
@@ -144,7 +144,7 @@ public class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDe
         }
     }
     
-    public var resource: Any? {
+    open var resource: Any? {
         didSet {
             scrollView.setZoomScale(1, animated: true)
             if let image = resource as? UIImage {
@@ -169,8 +169,8 @@ public class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDe
         }
     }
     
-    public var tapAction: ((_ tap: UITapGestureRecognizer) -> ())?
-    public var dismiss: (() -> ())?
+    open var tapAction: ((_ tap: UITapGestureRecognizer) -> ())?
+    open var dismiss: (() -> ())?
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -188,7 +188,7 @@ public class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDe
         addTap()
     }
     
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         originalFrame = frame
         originalCenter = center
@@ -198,11 +198,11 @@ public class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDe
         scrollView.bouncesZoom = true
     }
     
-    public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+    open func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         currentMultiple = scale
     }
     
-    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+    open func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
     
@@ -216,7 +216,7 @@ public class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDe
         tap.require(toFail: doubleTap)
     }
     
-    @objc public func tapAction(tap: UITapGestureRecognizer) {
+    @objc open func tapAction(tap: UITapGestureRecognizer) {
         scrollViewOffset = CGPoint.zero
         if tap.numberOfTapsRequired == 1 {
             dismiss?()
@@ -237,12 +237,12 @@ public class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDe
     }
     
     
-    public func isUrlString(urlString: String) -> Bool {
+    open func isUrlString(urlString: String) -> Bool {
         let predicate = NSPredicate.init(format: "SELF MATCHES %@", "(http|https):\\/\\/([\\w.]+\\/?)\\S*")
         return predicate.evaluate(with: urlString)
     }
     
-    public func fileExistsAtPath(path: String?) -> Bool {
+    open func fileExistsAtPath(path: String?) -> Bool {
         let fileManager = FileManager.default
         return fileManager.fileExists(atPath: path ?? "")
     }
