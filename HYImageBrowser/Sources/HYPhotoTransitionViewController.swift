@@ -1,6 +1,5 @@
 //
-//  PhotoTransitionViewController.swift
-//  FSFA
+//  HYPhotoTransitionViewController.swift
 //
 //  Created by Yan Hu on 2018/5/9.
 //  Copyright © 2018年 shinho. All rights reserved.
@@ -8,7 +7,7 @@
 
 import UIKit
 
-extension UIView {
+public extension UIView {
     var rectInWindow: CGRect {
         if let window = UIApplication.shared.windows.last {
             return self.superview?.convert(self.frame, to: window) ?? .zero
@@ -17,7 +16,7 @@ extension UIView {
     }
 }
 
-class PhotoTransitionViewController: UIViewController, UIViewControllerTransitioningDelegate {
+public class HYPhotoTransitionViewController: UIViewController, UIViewControllerTransitioningDelegate {
     var fromImage: UIImage?
     var fromFrames: [CGRect]? // 多张图片
     private(set) var fromFrame: CGRect? {
@@ -30,7 +29,7 @@ class PhotoTransitionViewController: UIViewController, UIViewControllerTransitio
     var fromImageContentMode: UIViewContentMode = .scaleAspectFill
     var photos: [Any?] = []
     var index = 0
-    private var child: PhotoPreviewController!
+    private var child: HYPhotoPreviewController!
     
     init(fromImage: UIImage?, fromFrame: CGRect?, photos: [Any?], imageContentMode: UIViewContentMode = .scaleAspectFill) {
         super.init(nibName: nil, bundle: nil)
@@ -39,7 +38,7 @@ class PhotoTransitionViewController: UIViewController, UIViewControllerTransitio
         self.photos = photos
         self.fromImageContentMode = imageContentMode
         
-        child = PhotoPreviewController()
+        child = HYPhotoPreviewController()
         child.photos = photos
         addChildViewController(child)
         
@@ -47,7 +46,7 @@ class PhotoTransitionViewController: UIViewController, UIViewControllerTransitio
         modalPresentationStyle = .custom
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.addSubview(child.view)
@@ -72,16 +71,16 @@ class PhotoTransitionViewController: UIViewController, UIViewControllerTransitio
         return frames
     }
     
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        let presentation = AXPresentationController.init(presentedViewController: presented, presenting: presenting)
+    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let presentation = HYPresentationController.init(presentedViewController: presented, presenting: presenting)
         return presentation
     }
     
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return animatorWithType(type: .dismiss)
     }
     
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return animatorWithType(type: .present)
     }
     
@@ -99,12 +98,12 @@ class PhotoTransitionViewController: UIViewController, UIViewControllerTransitio
         return animator
     }
 
-    override func didReceiveMemoryWarning() {
+    override public func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -115,13 +114,13 @@ enum PhotoTransitionAnimationType {
     dismiss
 }
 
-class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+public class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     var duration: TimeInterval = 0.1
     var animationType = PhotoTransitionAnimationType.present
     var fromImage: UIImage?
     var fromFrame: CGRect = CGRect.zero
     var fromImageContentMode: UIViewContentMode!
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
     }
     
@@ -136,7 +135,7 @@ class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         return CGRect.init(x: rect.origin.x, y: rect.origin.y - adjustHeight, width: rect.width, height: rect.width * scale)
     }
     
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let toVC = transitionContext.viewController(forKey: .to)
         let containerView = transitionContext.containerView
         let imageView = UIImageView()
@@ -205,7 +204,7 @@ class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     }
 }
 
-class AXPresentationController: UIPresentationController {
+fileprivate class HYPresentationController: UIPresentationController {
     override var shouldRemovePresentersView: Bool {
         get {
             return true

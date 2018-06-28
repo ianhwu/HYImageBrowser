@@ -1,6 +1,6 @@
 //
-//  PhotoPreviewController.swift
-//  FSFA
+//  HYPhotoPreviewController.swift
+//
 //
 //  Created by Yan Hu on 2018/5/8.
 //  Copyright © 2018年 shinho. All rights reserved.
@@ -9,9 +9,9 @@
 import UIKit
 import Kingfisher
 
-class PhotoPreviewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-    private var collectionView: UICollectionView!
-    private var label: UILabel!
+public class HYPhotoPreviewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    var collectionView: UICollectionView!
+    var label: UILabel!
     var photos: [Any?] = [] {
         didSet {
             if photos.count > index {
@@ -31,11 +31,11 @@ class PhotoPreviewController: UIViewController, UICollectionViewDelegateFlowLayo
     
     var indexChanged: ((_ index: Int) -> ())?
     
-    override var prefersStatusBarHidden: Bool {
+    override public var prefersStatusBarHidden: Bool {
         return true
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
@@ -63,7 +63,7 @@ class PhotoPreviewController: UIViewController, UICollectionViewDelegateFlowLayo
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo_preview_cell", for: indexPath) as! PhotoPreviewCell
         cell.photo = photos[indexPath.row]
         cell.dismiss = {
@@ -73,28 +73,28 @@ class PhotoPreviewController: UIViewController, UICollectionViewDelegateFlowLayo
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.frame.size
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return image == nil ? photos.count : 1
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         index = Int(round(scrollView.contentOffset.x / (view.frame.size.width + 15)))
         image = (collectionView.cellForItem(at: IndexPath.init(row: index, section: 0)) as? PhotoPreviewCell)?.preview.image
         indexChanged?(index)
     }
 
-    override func didReceiveMemoryWarning() {
+    override public func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 }
 
 class PhotoPreviewCell: UICollectionViewCell {
-    private(set) var preview: PhotoPreview!
+    private(set) var preview: HYPhotoPreview!
     var photo: Any? {
         didSet {
             preview.resource = photo
@@ -115,7 +115,7 @@ class PhotoPreviewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        preview = PhotoPreview()
+        preview = HYPhotoPreview()
         addSubview(preview)
     }
     
@@ -129,7 +129,7 @@ class PhotoPreviewCell: UICollectionViewCell {
     }
 }
 
-class PhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate {
+class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate {
     private var scrollView: UIScrollView!
     private var imageView: UIImageView!
     private var isZoomedIn = false
@@ -251,3 +251,5 @@ class PhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+

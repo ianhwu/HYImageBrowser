@@ -44,7 +44,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             return cell.imageView?.rectInWindow ?? .zero
         }
         
-        let vc = PhotoTransitionViewController.init(fromImage: tableView.cellForRow(at: indexPath)?.imageView?.image, fromFrame: tableView.cellForRow(at: indexPath)?.imageView?.rectInWindow ?? .zero, photos: photos)
+        let vc = HYPhotoTransitionViewController.init(fromImage: tableView.cellForRow(at: indexPath)?.imageView?.image, fromFrame: tableView.cellForRow(at: indexPath)?.imageView?.rectInWindow ?? .zero, photos: photos)
         vc.index = indexPath.row
         vc.fromFrames = vc.frames(frames, behind: UInt(indexPaths?.first?.row ?? 0), after: UInt(indexPaths?.last?.row ?? 0))
         present(vc, animated: true, completion: nil)

@@ -13,8 +13,8 @@
 		EE4B800D20E38873007E0F91 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE4B800B20E38873007E0F91 /* Main.storyboard */; };
 		EE4B800F20E38873007E0F91 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE4B800E20E38873007E0F91 /* Assets.xcassets */; };
 		EE4B801220E38873007E0F91 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE4B801020E38873007E0F91 /* LaunchScreen.storyboard */; };
-		EE4B801C20E388DD007E0F91 /* PhotoTransitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4B801A20E388DD007E0F91 /* PhotoTransitionViewController.swift */; };
-		EE4B801D20E388DD007E0F91 /* PhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4B801B20E388DD007E0F91 /* PhotoPreviewController.swift */; };
+		EE4B801C20E388DD007E0F91 /* HYPhotoTransitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4B801A20E388DD007E0F91 /* HYPhotoTransitionViewController.swift */; };
+		EE4B801D20E388DD007E0F91 /* HYPhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4B801B20E388DD007E0F91 /* HYPhotoPreviewController.swift */; };
 		EE4B801F20E4755F007E0F91 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4B801E20E4755F007E0F91 /* ListViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,8 +29,8 @@
 		EE4B800E20E38873007E0F91 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EE4B801120E38873007E0F91 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EE4B801320E38873007E0F91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EE4B801A20E388DD007E0F91 /* PhotoTransitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoTransitionViewController.swift; sourceTree = "<group>"; };
-		EE4B801B20E388DD007E0F91 /* PhotoPreviewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPreviewController.swift; sourceTree = "<group>"; };
+		EE4B801A20E388DD007E0F91 /* HYPhotoTransitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HYPhotoTransitionViewController.swift; sourceTree = "<group>"; };
+		EE4B801B20E388DD007E0F91 /* HYPhotoPreviewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HYPhotoPreviewController.swift; sourceTree = "<group>"; };
 		EE4B801E20E4755F007E0F91 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,8 +99,8 @@
 		EE4B801920E388DD007E0F91 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				EE4B801A20E388DD007E0F91 /* PhotoTransitionViewController.swift */,
-				EE4B801B20E388DD007E0F91 /* PhotoPreviewController.swift */,
+				EE4B801A20E388DD007E0F91 /* HYPhotoTransitionViewController.swift */,
+				EE4B801B20E388DD007E0F91 /* HYPhotoPreviewController.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -220,9 +220,9 @@
 			files = (
 				EE4B800A20E38873007E0F91 /* ViewController.swift in Sources */,
 				EE4B800820E38873007E0F91 /* AppDelegate.swift in Sources */,
-				EE4B801C20E388DD007E0F91 /* PhotoTransitionViewController.swift in Sources */,
+				EE4B801C20E388DD007E0F91 /* HYPhotoTransitionViewController.swift in Sources */,
 				EE4B801F20E4755F007E0F91 /* ListViewController.swift in Sources */,
-				EE4B801D20E388DD007E0F91 /* PhotoPreviewController.swift in Sources */,
+				EE4B801D20E388DD007E0F91 /* HYPhotoPreviewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

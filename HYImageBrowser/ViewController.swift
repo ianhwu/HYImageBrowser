@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     }
     
     @objc func tap1Action() {
-        let vc = PhotoTransitionViewController.init(fromImage: image2.image, fromFrame: image2.rectInWindow, photos: ["https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530002174027&di=eb1cbf46ef769f20d8cdbdf1879201fb&imgtype=0&src=http%3A%2F%2Fimg.banbaow.com%2Fuploadfile%2F2015%2F0302%2F15%2F201503021512583260.jpg", image2.image], imageContentMode: .scaleAspectFit)
+        let vc = HYPhotoTransitionViewController.init(fromImage: image2.image, fromFrame: image2.rectInWindow, photos: ["https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530002174027&di=eb1cbf46ef769f20d8cdbdf1879201fb&imgtype=0&src=http%3A%2F%2Fimg.banbaow.com%2Fuploadfile%2F2015%2F0302%2F15%2F201503021512583260.jpg", image2.image], imageContentMode: .scaleAspectFit)
         vc.fromFrames = [image1.rectInWindow, image2.rectInWindow]
         present(vc, animated: true) {
             
@@ -55,7 +55,7 @@ class ViewController: UIViewController {
     }
     
     @objc func tap2Action() {
-        let vc = PhotoTransitionViewController.init(fromImage: image2.image, fromFrame: image2.rectInWindow, photos: [image1.image!, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530002174027&di=eb1cbf46ef769f20d8cdbdf1879201fb&imgtype=0&src=http%3A%2F%2Fimg.banbaow.com%2Fuploadfile%2F2015%2F0302%2F15%2F201503021512583260.jpg"], imageContentMode: .scaleAspectFit)
+        let vc = HYPhotoTransitionViewController.init(fromImage: image2.image, fromFrame: image2.rectInWindow, photos: [image1.image!, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530002174027&di=eb1cbf46ef769f20d8cdbdf1879201fb&imgtype=0&src=http%3A%2F%2Fimg.banbaow.com%2Fuploadfile%2F2015%2F0302%2F15%2F201503021512583260.jpg"], imageContentMode: .scaleAspectFit)
         vc.index = 1
         vc.fromFrames = [image1.rectInWindow, image2.rectInWindow]
         present(vc, animated: true) {
@@ -67,7 +67,5 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
 }
 
