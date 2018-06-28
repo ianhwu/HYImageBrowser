@@ -15,4 +15,4 @@ let vc = PhotoTransitionViewController.init(fromImage: image2.image,
 
 ## License
 
-HYTableViewSection is available under the MIT license. See the LICENSE file for more info.
+HYImageBroswer is available under the MIT license. See the LICENSE file for more info.
