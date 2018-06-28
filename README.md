@@ -1,4 +1,5 @@
 # HYImageBroswer
+![](https://github.com/yansaid/HYImageBrowser/blob/master/image_browser.gif)
 
 ## Install
     pod 'HYImageBroswer'
