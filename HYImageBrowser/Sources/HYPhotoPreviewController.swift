@@ -10,17 +10,17 @@ import UIKit
 import Kingfisher
 
 public class HYPhotoPreviewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-    var collectionView: UICollectionView!
-    var label: UILabel!
-    var photos: [Any?] = [] {
+    public var collectionView: UICollectionView!
+    public var label: UILabel!
+    public var photos: [Any?] = [] {
         didSet {
             if photos.count > index {
                 label?.text = "\(index + 1) / \(photos.count)"
             }
         }
     }
-    var image: UIImage?
-    var index = 0 {
+    public var image: UIImage?
+    public var index = 0 {
         didSet {
             if photos.count > index {
                 collectionView?.selectItem(at: IndexPath.init(row: index, section: 0), animated: false, scrollPosition: .centeredHorizontally)
@@ -29,7 +29,7 @@ public class HYPhotoPreviewController: UIViewController, UICollectionViewDelegat
         }
     }
     
-    var indexChanged: ((_ index: Int) -> ())?
+    public var indexChanged: ((_ index: Int) -> ())?
     
     override public var prefersStatusBarHidden: Bool {
         return true
@@ -95,19 +95,19 @@ public class HYPhotoPreviewController: UIViewController, UICollectionViewDelegat
 
 class PhotoPreviewCell: UICollectionViewCell {
     private(set) var preview: HYPhotoPreview!
-    var photo: Any? {
+    public var photo: Any? {
         didSet {
             preview.resource = photo
         }
     }
     
-    var dismiss: (() -> ())? {
+    public var dismiss: (() -> ())? {
         didSet {
             preview.dismiss = dismiss
         }
     }
     
-    var image: UIImage? {
+    public var image: UIImage? {
         didSet {
             preview.image = image
         }
@@ -129,7 +129,7 @@ class PhotoPreviewCell: UICollectionViewCell {
     }
 }
 
-class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate {
+public class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate {
     private var scrollView: UIScrollView!
     private var imageView: UIImageView!
     private var isZoomedIn = false
@@ -138,13 +138,13 @@ class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate 
     private var currentMultiple: CGFloat = 1.0
     private var pinchCenter = CGPoint.zero
     private var scrollViewOffset = CGPoint.zero
-    var image: UIImage? {
+    public var image: UIImage? {
         didSet {
             imageView.image = image
         }
     }
     
-    var resource: Any? {
+    public var resource: Any? {
         didSet {
             scrollView.setZoomScale(1, animated: true)
             if let image = resource as? UIImage {
@@ -169,10 +169,10 @@ class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate 
         }
     }
     
-    var tapAction: ((_ tap: UITapGestureRecognizer) -> ())?
-    var dismiss: (() -> ())?
+    public var tapAction: ((_ tap: UITapGestureRecognizer) -> ())?
+    public var dismiss: (() -> ())?
     
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -188,7 +188,7 @@ class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate 
         addTap()
     }
     
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         originalFrame = frame
         originalCenter = center
@@ -198,11 +198,11 @@ class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate 
         scrollView.bouncesZoom = true
     }
     
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+    public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         currentMultiple = scale
     }
     
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
     
@@ -216,7 +216,7 @@ class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate 
         tap.require(toFail: doubleTap)
     }
     
-    @objc private func tapAction(tap: UITapGestureRecognizer) {
+    @objc public func tapAction(tap: UITapGestureRecognizer) {
         scrollViewOffset = CGPoint.zero
         if tap.numberOfTapsRequired == 1 {
             dismiss?()
@@ -237,17 +237,17 @@ class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate 
     }
     
     
-    private func isUrlString(urlString: String) -> Bool {
+    public func isUrlString(urlString: String) -> Bool {
         let predicate = NSPredicate.init(format: "SELF MATCHES %@", "(http|https):\\/\\/([\\w.]+\\/?)\\S*")
         return predicate.evaluate(with: urlString)
     }
     
-    private func fileExistsAtPath(path: String?) -> Bool {
+    public func fileExistsAtPath(path: String?) -> Bool {
         let fileManager = FileManager.default
         return fileManager.fileExists(atPath: path ?? "")
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

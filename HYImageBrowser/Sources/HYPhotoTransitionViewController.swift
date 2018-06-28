@@ -8,7 +8,7 @@
 import UIKit
 
 public extension UIView {
-    var rectInWindow: CGRect {
+    public var rectInWindow: CGRect {
         if let window = UIApplication.shared.windows.last {
             return self.superview?.convert(self.frame, to: window) ?? .zero
         }
@@ -31,7 +31,7 @@ public class HYPhotoTransitionViewController: UIViewController, UIViewController
     var index = 0
     private var child: HYPhotoPreviewController!
     
-    init(fromImage: UIImage?, fromFrame: CGRect?, photos: [Any?], imageContentMode: UIViewContentMode = .scaleAspectFill) {
+    public init(fromImage: UIImage?, fromFrame: CGRect?, photos: [Any?], imageContentMode: UIViewContentMode = .scaleAspectFill) {
         super.init(nibName: nil, bundle: nil)
         self.fromImage = fromImage
         self.fromFrame = fromFrame
@@ -59,7 +59,7 @@ public class HYPhotoTransitionViewController: UIViewController, UIViewController
         }
     }
     
-    func frames(_ currenFrames: [CGRect], behind: UInt = 0, after: UInt = 0) -> [CGRect] {
+    public func frames(_ currenFrames: [CGRect], behind: UInt = 0, after: UInt = 0) -> [CGRect] {
         var frames = [CGRect]()
         for _ in 0 ..< behind {
             frames.append(.zero)
@@ -108,24 +108,24 @@ public class HYPhotoTransitionViewController: UIViewController, UIViewController
     }
 }
 
-enum PhotoTransitionAnimationType {
+public enum PhotoTransitionAnimationType {
     case
     present,
     dismiss
 }
 
 public class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    var duration: TimeInterval = 0.1
-    var animationType = PhotoTransitionAnimationType.present
-    var fromImage: UIImage?
-    var fromFrame: CGRect = CGRect.zero
-    var fromImageContentMode: UIViewContentMode!
+    public var duration: TimeInterval = 0.1
+    public var animationType = PhotoTransitionAnimationType.present
+    public var fromImage: UIImage?
+    public var fromFrame: CGRect = CGRect.zero
+    public var fromImageContentMode: UIViewContentMode!
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
     }
     
     /// 根据图片尺寸, 调整frame, 保证图片居中, width固定, height 动态变化
-    func adjustFrame(rect: CGRect, scaleSize: CGSize) -> CGRect {
+    public func adjustFrame(rect: CGRect, scaleSize: CGSize) -> CGRect {
         if scaleSize.width == 0 ||
             scaleSize.height == 0 {
             return rect
@@ -187,7 +187,7 @@ public class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         }
         
         /// 判断图片是否在视图中
-        func judgFrameIn(frame: CGRect) -> Bool {
+        public func judgFrameIn(frame: CGRect) -> Bool {
             var result = true
             let screenFrame = UIScreen.main.bounds
             if frame.origin.x > screenFrame.size.width ||
