@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D2713B44A483A1C07234F35E /* Pods_HYImageBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB5B53CBD3AA65ADF7773D78 /* Pods_HYImageBrowser.framework */; };
+		EE44751421421B0500E1CE78 /* UIImageView+HYImageBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE44751321421B0500E1CE78 /* UIImageView+HYImageBrowser.swift */; };
+		EE44751621421BCC00E1CE78 /* UIView+HYImageBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE44751521421BCC00E1CE78 /* UIView+HYImageBrowser.swift */; };
 		EE4B800820E38873007E0F91 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4B800720E38873007E0F91 /* AppDelegate.swift */; };
 		EE4B800A20E38873007E0F91 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4B800920E38873007E0F91 /* ViewController.swift */; };
 		EE4B800D20E38873007E0F91 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE4B800B20E38873007E0F91 /* Main.storyboard */; };
@@ -22,6 +24,8 @@
 		83E4D6534D5DA37C5713EA9A /* Pods-HYImageBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HYImageBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HYImageBrowser/Pods-HYImageBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 		8FCA7B225826278AE3991019 /* Pods-HYImageBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HYImageBrowser.release.xcconfig"; path = "Pods/Target Support Files/Pods-HYImageBrowser/Pods-HYImageBrowser.release.xcconfig"; sourceTree = "<group>"; };
 		DB5B53CBD3AA65ADF7773D78 /* Pods_HYImageBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HYImageBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE44751321421B0500E1CE78 /* UIImageView+HYImageBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+HYImageBrowser.swift"; sourceTree = "<group>"; };
+		EE44751521421BCC00E1CE78 /* UIView+HYImageBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+HYImageBrowser.swift"; sourceTree = "<group>"; };
 		EE4B800420E38873007E0F91 /* HYImageBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HYImageBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE4B800720E38873007E0F91 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EE4B800920E38873007E0F91 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +105,8 @@
 			children = (
 				EE4B801A20E388DD007E0F91 /* HYPhotoTransitionViewController.swift */,
 				EE4B801B20E388DD007E0F91 /* HYPhotoPreviewController.swift */,
+				EE44751321421B0500E1CE78 /* UIImageView+HYImageBrowser.swift */,
+				EE44751521421BCC00E1CE78 /* UIView+HYImageBrowser.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -219,7 +225,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE4B800A20E38873007E0F91 /* ViewController.swift in Sources */,
+				EE44751621421BCC00E1CE78 /* UIView+HYImageBrowser.swift in Sources */,
 				EE4B800820E38873007E0F91 /* AppDelegate.swift in Sources */,
+				EE44751421421B0500E1CE78 /* UIImageView+HYImageBrowser.swift in Sources */,
 				EE4B801C20E388DD007E0F91 /* HYPhotoTransitionViewController.swift in Sources */,
 				EE4B801F20E4755F007E0F91 /* ListViewController.swift in Sources */,
 				EE4B801D20E388DD007E0F91 /* HYPhotoPreviewController.swift in Sources */,
@@ -363,6 +371,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = EG7BNV2CC4;
 				INFOPLIST_FILE = HYImageBrowser/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = yan.HYImageBrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -379,6 +388,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = EG7BNV2CC4;
 				INFOPLIST_FILE = HYImageBrowser/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = yan.HYImageBrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";

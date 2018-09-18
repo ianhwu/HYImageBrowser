@@ -8,7 +8,52 @@
 
 import UIKit
 
-class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ListViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+        view.backgroundColor = .white
+        // UIImageView 只有 isRetrieval = true 可以被检索到
+        view.isOnlyRetrieval = true
+        view.isAutoShowed = true
+        
+        for i in 0 ..< 4 {
+            let image1 = UIImageView.init(frame: CGRect.init(origin: CGPoint.init(x: 10, y: 100 * i + 20), size: CGSize.init(width: 200, height: 100)))
+            image1.contentMode = .scaleAspectFit
+            image1.clipsToBounds = true
+            // 只有标示为 isRetrieval 可以被检索到
+            image1.isRetrieval = true
+            image1.isUserInteractionEnabled = true
+            image1.kf.setImage(with: URL.init(string: "http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg"))
+            
+            view.addSubview(image1)
+        }
+        
+        let imageGoogle = UIImageView()
+        imageGoogle.image = UIImage.init(named: "google")
+        imageGoogle.frame = CGRect.init(x: 100, y: 100, width: 100, height: 100)
+        view.addSubview(imageGoogle)
+        
+        let button = UIButton.init(type: .custom)
+        view.addSubview(button)
+        button.frame = CGRect.init(x: 10, y: 500, width: 50, height: 30)
+        button.backgroundColor = .red
+        button.addTarget(self, action: #selector(tapAction), for: .touchUpInside)
+    }
+    
+    @objc func tapAction() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+}
+
+
+class ListViewController2: UIViewController, UITableViewDelegate, UITableViewDataSource, HYPhotoPreviewControllerDataSource {
+    
     var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,34 +65,43 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         view.addSubview(tableView)
+        
+        let button = UIButton.init(type: .custom)
+        view.addSubview(button)
+        button.frame = CGRect.init(x: 10, y: 500, width: 50, height: 30)
+        button.backgroundColor = .red
+        button.addTarget(self, action: #selector(tapAction), for: .touchUpInside)
+    }
+    
+    @objc func tapAction() {
+        dismiss(animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
-        cell.imageView?.kf.setImage(with: URL.init(string: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530002174027&di=eb1cbf46ef769f20d8cdbdf1879201fb&imgtype=0&src=http%3A%2F%2Fimg.banbaow.com%2Fuploadfile%2F2015%2F0302%2F15%2F201503021512583260.jpg"))
+        cell.imageView?.kf.setImage(with: URL.init(string: "http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg"))
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var photos = [Any?]()
-        for i in 0 ..< 50 {
-            if i == indexPath.row {
-                photos.append(tableView.cellForRow(at: indexPath)?.imageView?.image)
-            } else {
-                photos.append("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530002174027&di=eb1cbf46ef769f20d8cdbdf1879201fb&imgtype=0&src=http%3A%2F%2Fimg.banbaow.com%2Fuploadfile%2F2015%2F0302%2F15%2F201503021512583260.jpg")
-            }
-        }
-        
-        let cells = tableView.visibleCells
-        let indexPaths = tableView.indexPathsForVisibleRows
-        let frames = cells.map { (cell) -> CGRect in
-            return cell.imageView?.rectInWindow ?? .zero
-        }
-        
-        let vc = HYPhotoTransitionViewController.init(fromImage: tableView.cellForRow(at: indexPath)?.imageView?.image, fromFrame: tableView.cellForRow(at: indexPath)?.imageView?.rectInWindow ?? .zero, photos: photos)
+        let cell = tableView.cellForRow(at: indexPath)
+        let vc = HYPhotoTransitionViewController.init(preview: cell?.imageView?.image)
         vc.index = indexPath.row
-        vc.fromFrames = vc.frames(frames, behind: UInt(indexPaths?.first?.row ?? 0), after: UInt(indexPaths?.last?.row ?? 0))
+        vc.previewDataSource = self
         present(vc, animated: true, completion: nil)
+    }
+    
+    func photoPreviewCount() -> Int {
+        return 50
+    }
+    
+    func photoPreviewResource(at index: Int) -> Any? {
+        return "http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg"
+    }
+    
+    func photoPreviewTransitionFrame(with currentIndex: Int) -> CGRect {
+        let cell = tableView.cellForRow(at: IndexPath.init(row: currentIndex, section: 0))
+        return cell?.imageView?.rectInWindow ?? .zero
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -57,10 +111,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 50
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 }
-

@@ -16,29 +16,33 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        image1 = UIImageView.init(frame: CGRect.init(origin: CGPoint.init(x: 10, y: 150), size: CGSize.init(width: 100, height: 200)))
+        image1 = UIImageView.init(frame: CGRect.init(origin: CGPoint.init(x: 10, y: 100), size: CGSize.init(width: 100, height: 200)))
         image1.contentMode = .scaleAspectFit
         image1.clipsToBounds = true
         image1.isUserInteractionEnabled = true
-        image1.kf.setImage(with: URL.init(string: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530002174027&di=eb1cbf46ef769f20d8cdbdf1879201fb&imgtype=0&src=http%3A%2F%2Fimg.banbaow.com%2Fuploadfile%2F2015%2F0302%2F15%2F201503021512583260.jpg"))
+        image1.kf.setImage(with: URL.init(string: "http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg"))
         
-        image2 = UIImageView.init(frame: CGRect.init(origin: CGPoint.init(x: 10, y: 400), size: CGSize.init(width: 50, height: 70)))
+        image2 = UIImageView.init(frame: CGRect.init(origin: CGPoint.init(x: 10, y: 300), size: CGSize.init(width: 50, height: 70)))
+        image2.contentMode = .scaleAspectFit
         image2.isUserInteractionEnabled = true
         image2.clipsToBounds = true
-        image2.kf.setImage(with: URL.init(string: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530002174027&di=eb1cbf46ef769f20d8cdbdf1879201fb&imgtype=0&src=http%3A%2F%2Fimg.banbaow.com%2Fuploadfile%2F2015%2F0302%2F15%2F201503021512583260.jpg"))
-        image2.contentMode = .scaleAspectFit
+        image2.kf.setImage(with: URL.init(string: "http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg"))
         
         view.addSubview(image1)
         view.addSubview(image2)
+        view.isAutoShowed = true
         
-        let tap1 = UITapGestureRecognizer.init(target: self, action: #selector(tap1Action))
-        image1.addGestureRecognizer(tap1)
+        let button = UIButton.init(type: .custom)
+        view.addSubview(button)
+        button.frame = CGRect.init(x: 150, y: 400, width: 50, height: 20)
+        button.backgroundColor = .red
+        button.addTarget(self, action: #selector(tapAction), for: .touchUpInside)
         
-        let tap2 = UITapGestureRecognizer.init(target: self, action: #selector(tap2Action))
-        image2.addGestureRecognizer(tap2)
-        
-        let tap = UITapGestureRecognizer.init(target: self, action: #selector(tapAction))
-        view.addGestureRecognizer(tap)
+        let button2 = UIButton.init(type: .custom)
+        view.addSubview(button2)
+        button2.frame = CGRect.init(x: 150, y: 450, width: 50, height: 20)
+        button2.backgroundColor = .red
+        button2.addTarget(self, action: #selector(tapAction2), for: .touchUpInside)
     }
     
     @objc func tapAction() {
@@ -46,21 +50,9 @@ class ViewController: UIViewController {
         self.present(vc, animated: true, completion: nil)
     }
     
-    @objc func tap1Action() {
-        let vc = HYPhotoTransitionViewController.init(fromImage: image2.image, fromFrame: image2.rectInWindow, photos: ["https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530002174027&di=eb1cbf46ef769f20d8cdbdf1879201fb&imgtype=0&src=http%3A%2F%2Fimg.banbaow.com%2Fuploadfile%2F2015%2F0302%2F15%2F201503021512583260.jpg", image2.image], imageContentMode: .scaleAspectFit)
-        vc.fromFrames = [image1.rectInWindow, image2.rectInWindow]
-        present(vc, animated: true) {
-            
-        }
-    }
-    
-    @objc func tap2Action() {
-        let vc = HYPhotoTransitionViewController.init(fromImage: image2.image, fromFrame: image2.rectInWindow, photos: [image1.image!, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530002174027&di=eb1cbf46ef769f20d8cdbdf1879201fb&imgtype=0&src=http%3A%2F%2Fimg.banbaow.com%2Fuploadfile%2F2015%2F0302%2F15%2F201503021512583260.jpg"], imageContentMode: .scaleAspectFit)
-        vc.index = 1
-        vc.fromFrames = [image1.rectInWindow, image2.rectInWindow]
-        present(vc, animated: true) {
-            
-        }
+    @objc func tapAction2() {
+        let vc = ListViewController2()
+        self.present(vc, animated: true, completion: nil)
     }
 
     override func didReceiveMemoryWarning() {

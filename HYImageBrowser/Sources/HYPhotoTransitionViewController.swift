@@ -7,68 +7,66 @@
 
 import UIKit
 
-public extension UIView {
-    public var rectInWindow: CGRect {
-        if let window = UIApplication.shared.windows.last {
-            return self.superview?.convert(self.frame, to: window) ?? .zero
-        }
-        return .zero
-    }
-}
-
 open class HYPhotoTransitionViewController: UIViewController, UIViewControllerTransitioningDelegate {
-    open var fromImage: UIImage?
-    open var fromFrames: [CGRect]? // 多张图片
-    open private(set) var fromFrame: CGRect? {
+    /// 图片位置 present 和 dismiss, 不设置默认 alpha 1 -> 0
+    open var fromFrames: [CGRect]?
+    /// 跳转预览图
+    open var imageContentMode: UIView.ContentMode = .scaleAspectFill
+    /// 多个数据处理
+    open var photos: [Any?] = [] {
         didSet {
-            if let frame = fromFrame {
-                fromFrames = [frame]
-            }
+            reload()
         }
     }
-    open var fromImageContentMode: UIViewContentMode = .scaleAspectFill
-    open var photos: [Any?] = []
-    open var index = 0
-    private var child: HYPhotoPreviewController!
     
-    public init(fromImage: UIImage?, fromFrame: CGRect?, photos: [Any?], imageContentMode: UIViewContentMode = .scaleAspectFill) {
+    open var index = 0 {
+        didSet {
+            child?.index = index
+        }
+    }
+    
+    open weak var previewDataSource: HYPhotoPreviewControllerDataSource? {
+        didSet {
+            child.dataSource = previewDataSource
+        }
+    }
+    
+    private var child: HYPhotoPreviewController!
+    private var previewImage: UIImage?
+    
+    public init(preview: UIImage?) {
         super.init(nibName: nil, bundle: nil)
-        self.fromImage = fromImage
-        self.fromFrame = fromFrame
-        self.photos = photos
-        self.fromImageContentMode = imageContentMode
-        
+        previewImage = preview
         child = HYPhotoPreviewController()
-        child.photos = photos
         addChildViewController(child)
-        
         transitioningDelegate = self
         modalPresentationStyle = .custom
+    }
+    
+    public func reload() {
+        child?.photos = photos.count > 0 ? photos : [previewImage ?? UIImage()]
+    }
+    
+    @objc private func dismissSelf() {
+        dismiss(animated: true, completion: nil)
     }
     
     override open func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        let tap = UITapGestureRecognizer.init(target: self, action: #selector(dismissSelf))
+        view.addGestureRecognizer(tap)
+        
         view.addSubview(child.view)
         child.view.frame = view.bounds
         child.index = index
         child.indexChanged = {
             [unowned self] index in
             self.index = index
-            self.fromImage = self.child.image
+            self.previewImage = self.child.image
         }
-    }
-    
-    open func frames(_ currenFrames: [CGRect], behind: UInt = 0, after: UInt = 0) -> [CGRect] {
-        var frames = [CGRect]()
-        for _ in 0 ..< behind {
-            frames.append(.zero)
-        }
-        frames += currenFrames
-        for _ in 0 ..< after {
-            frames.append(.zero)
-        }
-        return frames
+        reload()
     }
     
     open func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
@@ -84,17 +82,21 @@ open class HYPhotoTransitionViewController: UIViewController, UIViewControllerTr
         return animatorWithType(type: .present)
     }
     
-    private func animatorWithType(type: PhotoTransitionAnimationType) -> PhotoTransitionAnimator {
-        let animator = PhotoTransitionAnimator()
+    private func animatorWithType(type: HYPhotoTransitionAnimationType) -> HYPhotoTransitionAnimator {
+        let animator = HYPhotoTransitionAnimator()
         animator.duration = 0.3
         animator.animationType = type
-        animator.fromImage = fromImage ?? UIImage()
-        if (fromFrames?.count ?? 0) > index {
-            animator.fromFrame = fromFrames![index]
+        animator.fromImage = previewImage
+        if let dataSource = child.dataSource {
+            animator.fromFrame = dataSource.photoPreviewTransitionFrame(with: index)
         } else {
-            animator.fromFrame = CGRect.zero
+            if (fromFrames?.count ?? 0) > index {
+                animator.fromFrame = fromFrames![index]
+            } else {
+                animator.fromFrame = .zero
+            }
         }
-        animator.fromImageContentMode = fromImageContentMode
+        animator.imageContentMode = imageContentMode
         return animator
     }
 
@@ -108,24 +110,24 @@ open class HYPhotoTransitionViewController: UIViewController, UIViewControllerTr
     }
 }
 
-public enum PhotoTransitionAnimationType {
+public enum HYPhotoTransitionAnimationType {
     case
     present,
     dismiss
 }
 
-open class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+open class HYPhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     open var duration: TimeInterval = 0.1
-    open var animationType = PhotoTransitionAnimationType.present
+    open var animationType = HYPhotoTransitionAnimationType.present
     open var fromImage: UIImage?
     open var fromFrame: CGRect = CGRect.zero
-    open var fromImageContentMode: UIViewContentMode!
-    open func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+    open var imageContentMode: UIView.ContentMode!
+    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
     }
     
     /// 根据图片尺寸, 调整frame, 保证图片居中, width固定, height 动态变化
-    open func adjustFrame(rect: CGRect, scaleSize: CGSize) -> CGRect {
+    public func adjustFrame(rect: CGRect, scaleSize: CGSize) -> CGRect {
         if scaleSize.width == 0 ||
             scaleSize.height == 0 {
             return rect
@@ -135,7 +137,16 @@ open class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
         return CGRect.init(x: rect.origin.x, y: rect.origin.y - adjustHeight, width: rect.width, height: rect.width * scale)
     }
     
-    open func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    /// 判断图片是否在视图中
+    public func judgFrameIn(frame: CGRect) -> Bool {
+        if frame == .zero {
+            return false
+        }
+        let screenFrame = UIScreen.main.bounds
+        return screenFrame.intersects(frame)
+    }
+    
+    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let toVC = transitionContext.viewController(forKey: .to)
         let containerView = transitionContext.containerView
         let imageView = UIImageView()
@@ -154,8 +165,13 @@ open class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
             toVC?.view.isHidden = true
         }
         
-        imageView.contentMode = fromImageContentMode
-        imageView.frame = fromFrame
+        imageView.contentMode = imageContentMode
+        if judgFrameIn(frame: fromFrame) {
+            imageView.frame = fromFrame
+        } else {
+            imageView.frame = finalFrame
+        }
+        
         imageView.image = fromImage
         imageView.clipsToBounds = true
         background.frame = UIScreen.main.bounds
@@ -164,12 +180,12 @@ open class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
         containerView.addSubview(toVC!.view)
         containerView.addSubview(background)
         containerView.addSubview(imageView)
-
+        
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             [weak self] in
             background.alpha = self?.animationType == .dismiss ? 0 : 1
             if self?.animationType == .dismiss {
-                if judgFrameIn(frame: finalFrame) {
+                if self?.judgFrameIn(frame: finalFrame) ?? false {
                     imageView.frame = finalFrame
                 } else {
                     imageView.alpha = 0
@@ -184,22 +200,6 @@ open class PhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransition
                 toVC?.view.isHidden = false
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             }
-        }
-        
-        /// 判断图片是否在视图中
-        func judgFrameIn(frame: CGRect) -> Bool {
-            var result = true
-            let screenFrame = UIScreen.main.bounds
-            if frame.origin.x > screenFrame.size.width ||
-                frame.origin.y > screenFrame.size.height ||
-                frame.origin.x + frame.size.width < 0 ||
-                frame.origin.y + frame.size.height < 0 ||
-                frame.size.width == 0 ||
-                frame.size.height == 0
-                {
-                result = false
-            }
-            return result
         }
     }
 }

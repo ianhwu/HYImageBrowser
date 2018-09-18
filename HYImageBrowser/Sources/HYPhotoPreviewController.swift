@@ -9,6 +9,13 @@
 import UIKit
 import Kingfisher
 
+/// 动态配置方案
+public protocol HYPhotoPreviewControllerDataSource: class {
+    func photoPreviewCount() -> Int
+    func photoPreviewResource(at index: Int) -> Any?
+    func photoPreviewTransitionFrame(with currentIndex: Int) -> CGRect
+}
+
 open class HYPhotoPreviewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     open var collectionView: UICollectionView!
     open var label: UILabel!
@@ -19,11 +26,16 @@ open class HYPhotoPreviewController: UIViewController, UICollectionViewDelegateF
             }
         }
     }
+    
+    /// if set dataSource, photos will be invalid
+    weak var dataSource: HYPhotoPreviewControllerDataSource?
     open var image: UIImage?
     open var index = 0 {
         didSet {
-            if photos.count > index {
-                collectionView?.selectItem(at: IndexPath.init(row: index, section: 0), animated: false, scrollPosition: .centeredHorizontally)
+            collectionView?.selectItem(at: IndexPath.init(row: index, section: 0), animated: false, scrollPosition: .centeredHorizontally)
+            if let dataSource = dataSource {
+                label?.text = "\(index + 1) / \(dataSource.photoPreviewCount())"
+            } else {
                 label?.text = "\(index + 1) / \(photos.count)"
             }
         }
@@ -47,7 +59,7 @@ open class HYPhotoPreviewController: UIViewController, UICollectionViewDelegateF
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.isPagingEnabled = true
-        collectionView.register(PhotoPreviewCell.self, forCellWithReuseIdentifier: "photo_preview_cell")
+        collectionView.register(HYPhotoPreviewCell.self, forCellWithReuseIdentifier: "photo_preview_cell")
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         view.addSubview(collectionView)
@@ -58,14 +70,19 @@ open class HYPhotoPreviewController: UIViewController, UICollectionViewDelegateF
         label.textColor = .white
         label.frame = CGRect.init(x: 0, y: 44, width: view.frame.size.width, height: 20)
         view.addSubview(label)
-        if photos.count > index {
-            label.text = "\(index + 1) / \(photos.count)"
-        }
+        
+        // 初始化显示
+        let i = index
+        index = i
     }
     
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo_preview_cell", for: indexPath) as! PhotoPreviewCell
-        cell.photo = photos[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo_preview_cell", for: indexPath) as! HYPhotoPreviewCell
+        if let dataSource = dataSource {
+            cell.photo = dataSource.photoPreviewResource(at: indexPath.row)
+        } else {
+            cell.photo = photos[indexPath.row]
+        }
         cell.dismiss = {
             [unowned self] in
             self.dismiss(animated: true, completion: nil)
@@ -78,12 +95,15 @@ open class HYPhotoPreviewController: UIViewController, UICollectionViewDelegateF
     }
     
     open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return image == nil ? photos.count : 1
+        if let dataSource = dataSource {
+            return dataSource.photoPreviewCount()
+        }
+        return photos.count
     }
     
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         index = Int(round(scrollView.contentOffset.x / (view.frame.size.width + 15)))
-        image = (collectionView.cellForItem(at: IndexPath.init(row: index, section: 0)) as? PhotoPreviewCell)?.preview.image
+        image = (collectionView.cellForItem(at: IndexPath.init(row: index, section: 0)) as? HYPhotoPreviewCell)?.preview.image
         indexChanged?(index)
     }
 
@@ -93,7 +113,7 @@ open class HYPhotoPreviewController: UIViewController, UICollectionViewDelegateF
     }
 }
 
-class PhotoPreviewCell: UICollectionViewCell {
+class HYPhotoPreviewCell: UICollectionViewCell {
     private(set) var preview: HYPhotoPreview!
     public var photo: Any? {
         didSet {
@@ -132,14 +152,28 @@ class PhotoPreviewCell: UICollectionViewCell {
 open class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate {
     private var scrollView: UIScrollView!
     private var imageView: UIImageView!
+    private var loading: UIActivityIndicatorView!
     private var isZoomedIn = false
     private var originalFrame = CGRect.zero
     private var originalCenter = CGPoint.zero
     private var currentMultiple: CGFloat = 1.0
+    private var maxMultiple: CGFloat = 2 {
+        didSet {
+            scrollView?.maximumZoomScale = maxMultiple
+        }
+    }
     private var pinchCenter = CGPoint.zero
     private var scrollViewOffset = CGPoint.zero
     public var image: UIImage? {
         didSet {
+            if let img = image {
+                let multiple = img.size.width / img.size.height
+                if multiple > 2 {
+                    maxMultiple = multiple
+                } else {
+                    maxMultiple = 2
+                }
+            }
             imageView.image = image
         }
     }
@@ -151,8 +185,10 @@ open class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDele
                 self.image = image
             } else if let urlString = resource as? String {
                 if isUrlString(urlString: urlString ) {
+                    loading.startAnimating()
                     imageView.kf.setImage(with: URL.init(string: urlString),  completionHandler: {
                         [weak self] (image, error, type, url) in
+                        self?.loading.stopAnimating()
                         self?.image = image
                     })
                 } else if fileExistsAtPath(path: urlString) {
@@ -177,14 +213,17 @@ open class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDele
         imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         
+        loading = UIActivityIndicatorView.init(activityIndicatorStyle: .white)
+        
         scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.minimumZoomScale = 1
-        scrollView.maximumZoomScale = 2.0
+        scrollView.maximumZoomScale = maxMultiple
         scrollView.delegate = self
         scrollView.addSubview(imageView)
         addSubview(scrollView)
+        imageView.addSubview(loading)
         addTap()
     }
     
@@ -227,10 +266,10 @@ open class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDele
                 scrollView.setZoomScale(1, animated: true)
             } else {
                 isZoomedIn = true
-                scrollView.zoom(to: CGRect.init(origin: CGPoint.init(x: point.x  - frame.size.width / 4,
-                                                                     y: point.y - frame.size.height / 4),
-                                                size: CGSize.init(width: frame.size.width / 2,
-                                                                  height: frame.size.height / 2)), animated: true)
+                scrollView.zoom(to: CGRect.init(origin: CGPoint.init(x: point.x  - frame.size.width / (maxMultiple * 2),
+                                                                     y: point.y - frame.size.height / (maxMultiple * 2)),
+                                                size: CGSize.init(width: frame.size.width / maxMultiple,
+                                                                  height: frame.size.height / maxMultiple)), animated: true)
             }
         }
         tapAction?(tap)
