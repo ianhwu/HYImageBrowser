@@ -66,7 +66,7 @@ public extension UIView {
         var frames = [CGRect]()
         var currentImage = UIImage()
         var index = 0
-        var imageContentMode = UIViewContentMode.scaleAspectFill
+        var imageContentMode = UIView.ContentMode.scaleAspectFill
         var foundIndex = false
         
         

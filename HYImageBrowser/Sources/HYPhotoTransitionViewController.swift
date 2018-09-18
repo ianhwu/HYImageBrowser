@@ -38,7 +38,7 @@ open class HYPhotoTransitionViewController: UIViewController, UIViewControllerTr
         super.init(nibName: nil, bundle: nil)
         previewImage = preview
         child = HYPhotoPreviewController()
-        addChildViewController(child)
+        addChild(child)
         transitioningDelegate = self
         modalPresentationStyle = .custom
     }

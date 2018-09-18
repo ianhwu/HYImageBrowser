@@ -213,7 +213,7 @@ open class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDele
         imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         
-        loading = UIActivityIndicatorView.init(activityIndicatorStyle: .white)
+        loading = UIActivityIndicatorView.init(style: .white)
         
         scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
