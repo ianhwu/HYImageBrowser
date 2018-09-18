@@ -1,6 +1,4 @@
 # HYImageBroswer
-![](https://github.com/yansaid/HYImageBrowser/blob/master/image_browser.gif?raw=true)
-
 load images by kingfisher, support image, url, file path.
 
 ## Install
@@ -8,6 +6,7 @@ load images by kingfisher, support image, url, file path.
 ## Usage
 
 find all UIImageView, order by addSubview function
+![](https://github.com/yansaid/HYImageBrowser/blob/master/type1.gif?raw=true)
 ```
 view.isAutoShowed = true  /// use isAutoShowed to show view's subviews which are UIImageView
 ```
