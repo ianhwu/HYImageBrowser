@@ -54,7 +54,7 @@ public extension UIView {
     @objc private func show(tap: UITapGestureRecognizer) {
         if let window = UIApplication.shared.keyWindow,
             let superView = self.superview {
-            showAllImages(touchPoint: superView.convert(tap.location(in: self), to: window))
+            showAllImages(touchPoint: self.convert(tap.location(in: self), to: window))
         }
     }
     
@@ -139,11 +139,7 @@ public extension UIView {
         }
         findImages(view: self)
         
-        if index >= images.count {
-            index = 0
-        }
-        
-        if images.count > 0 {
+        if images.count > 0, index < images.count {
             images[index] = currentImage
             let vc = HYPhotoTransitionViewController.init(preview: currentImage)
             vc.photos = images

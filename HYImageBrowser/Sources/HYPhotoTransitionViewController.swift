@@ -120,7 +120,8 @@ open class HYPhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
     open var duration: TimeInterval = 0.1
     open var animationType = HYPhotoTransitionAnimationType.present
     open var fromImage: UIImage?
-    open var fromFrame: CGRect = CGRect.zero
+    open var fromFrame = CGRect.zero
+    open var dismissRect = UIScreen.main.bounds
     open var imageContentMode: UIView.ContentMode!
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
@@ -154,7 +155,7 @@ open class HYPhotoTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         background.alpha = 0
         
         var fromFrame = self.fromFrame
-        var finalFrame = UIScreen.main.bounds
+        var finalFrame = dismissRect
         finalFrame = adjustFrame(rect: finalFrame, scaleSize: fromImage?.size ?? CGSize.zero)
         
         if animationType == .dismiss {
