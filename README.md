@@ -1,17 +1,21 @@
 # HYImageBroswer
-![](https://github.com/yansaid/HYImageBrowser/blob/master/image_browser.gif?raw=true)
-
 load images by kingfisher, support image, url, file path.
 
 ## Install
     pod 'HYImageBroswer'
 ## Usage
 
-find all UIImageView, order by addSubview function
+find all UIImageView, order by addSubview function.
+
+![](https://github.com/yansaid/HYImageBrowser/blob/master/type1.gif?raw=true)
+
 ```
 view.isAutoShowed = true  /// use isAutoShowed to show view's subviews which are UIImageView
 ```
-Show images which you what
+Show images which you want.
+
+![](https://github.com/yansaid/HYImageBrowser/blob/master/type2.gif?raw=true)
+
 ```
 override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +45,9 @@ override func viewDidLoad() {
 ```
 
 Handle sources by yourself.
+
+![](https://github.com/yansaid/HYImageBrowser/blob/master/type3.gif?raw=true)
+
 ```
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
