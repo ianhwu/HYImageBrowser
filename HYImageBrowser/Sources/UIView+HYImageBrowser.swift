@@ -13,7 +13,7 @@ private var isAutoShowedKey: Void?
 public extension UIView {
     
     /// 如果 isOnlyRetrieval 为 true, UIImageView isRetrieval 必须为 true才可以显示, 如果为 false, 所有都可以显示
-    public var isOnlyRetrieval: Bool? {
+    var isOnlyRetrieval: Bool? {
         set {
             objc_setAssociatedObject(self, &isOnlyRetrievalKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
@@ -23,7 +23,7 @@ public extension UIView {
     }
     
     /// 在当前 view 上加一个点击, 并且自动检索所有图片 auto set isUserInteractionEnabled = true
-    public var isAutoShowed: Bool? {
+    var isAutoShowed: Bool? {
         set {
             var tap: UITapGestureRecognizer!
             if isAutoShowed == nil {
@@ -44,7 +44,7 @@ public extension UIView {
     }
     
     /// 视图在 window 中的位置
-    public var rectInWindow: CGRect {
+    var rectInWindow: CGRect {
         if let window = UIApplication.shared.keyWindow {
             return self.superview?.convert(self.frame, to: window) ?? .zero
         }
@@ -60,7 +60,7 @@ public extension UIView {
     /// 检索当前页面所有 imageView
     /// 如果未检索到, 不显示
     /// - Parameter touchPoint: 点击位置, 第一个在点击范围的图片为 预览图
-    public func showAllImages(touchPoint: CGPoint = .zero) {
+    func showAllImages(touchPoint: CGPoint = .zero) {
         var images = [Any]()
         var frames = [CGRect]()
         var currentImage = UIImage()
@@ -151,7 +151,7 @@ public extension UIView {
         }
     }
 
-    public var topViewController: UIViewController? {
+    var topViewController: UIViewController? {
         if let window = UIApplication.shared.keyWindow {
             return window.currentViewController()
         }
@@ -163,7 +163,7 @@ public extension UIView {
 public extension UIWindow {
     
     /** @return Returns the current Top Most ViewController in hierarchy.   */
-    public func topMostWindowController()->UIViewController? {
+    func topMostWindowController()->UIViewController? {
         
         var topController = rootViewController
         
@@ -175,7 +175,7 @@ public extension UIWindow {
     }
     
     /** @return Returns the topViewController in stack of topMostWindowController.    */
-    public func currentViewController()->UIViewController? {
+    func currentViewController()->UIViewController? {
         
         var currentViewController = topMostWindowController()
         
