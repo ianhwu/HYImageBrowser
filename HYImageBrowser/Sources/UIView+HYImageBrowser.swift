@@ -52,8 +52,7 @@ public extension UIView {
     }
     
     @objc private func show(tap: UITapGestureRecognizer) {
-        if let window = UIApplication.shared.keyWindow,
-            let superView = self.superview {
+        if let window = UIApplication.shared.keyWindow {
             showAllImages(touchPoint: self.convert(tap.location(in: self), to: window))
         }
     }
