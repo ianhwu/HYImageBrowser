@@ -3,5 +3,5 @@ platform :ios, '10.0'
 inhibit_all_warnings!
 target 'HYImageBrowser' do
   use_frameworks!
-    pod 'Kingfisher', '~> 5.8.3'
+    pod 'Kingfisher'
 end

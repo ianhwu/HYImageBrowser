@@ -186,11 +186,15 @@ open class HYPhotoPreview: UIView, UIGestureRecognizerDelegate, UIScrollViewDele
             } else if let urlString = resource as? String {
                 if isUrlString(urlString: urlString ) {
                     loading.startAnimating()
-                    imageView.kf.setImage(with: URL.init(string: urlString),  completionHandler: {
-                        [weak self] (image, error, type, url) in
+                    imageView.kf.setImage(with: URL.init(string: urlString)) {
+                        [weak self] (result) in
                         self?.loading.stopAnimating()
-                        self?.image = image
-                    })
+                        switch result {
+                        case .success(let result):
+                            self?.image = result.image
+                        case .failure(_): break
+                        }
+                    }
                 } else if fileExistsAtPath(path: urlString) {
                     image = UIImage.init(contentsOfFile: urlString)
                 } else  {
