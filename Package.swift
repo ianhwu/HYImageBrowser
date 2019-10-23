@@ -25,9 +25,6 @@ let package = Package(
         .target(
             name: "HYImageBrowser",
             dependencies: ["Kingfisher"],
-            path: "Sources"),
-        .testTarget(
-            name: "HYImageBrowserTests",
-            dependencies: ["HYImageBrowser"]),
+            path: "HYImageBrowser/Sources")
     ]
 )
