@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "HYImageBrowser",
+    platforms: [
+      .iOS(.v10)
+    ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
@@ -22,6 +25,9 @@ let package = Package(
         .target(
             name: "HYImageBrowser",
             dependencies: ["Kingfisher"],
-            path: "Sources")
+            path: "Sources"),
+        .testTarget(
+            name: "HYImageBrowserTests",
+            dependencies: ["HYImageBrowser"]),
     ]
 )
