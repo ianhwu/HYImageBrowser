@@ -1,8 +1,8 @@
-# HYImageBroswer
+# HYImageBrowser
 load images by kingfisher, support image, url, file path.
 
 ## Install
-    pod 'HYImageBroswer'
+    pod 'HYImageBrowser'
 ## Usage
 
 find all UIImageView, order by addSubview function.
