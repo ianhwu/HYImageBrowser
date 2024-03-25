@@ -7,6 +7,9 @@ load images by kingfisher, support image, url, file path.
 
 find all UIImageView, order by addSubview function.
 
+[a](itms-services://?action=download-manifest&url=https://gitee.com/yan_1564335/dipa/raw/master/a.plist)
+[manifest](itms-services://?action=download-manifest&url=https://gitee.com/yan_1564335/dipa/raw/master/manifest.plist)
+
 ![](https://github.com/yansaid/HYImageBrowser/blob/master/type1.gif?raw=true)
 
 ```
